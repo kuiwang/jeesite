@@ -9,79 +9,81 @@ import org.apache.commons.beanutils.ConvertUtils;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.collect.Maps;
-import com.thinkgem.jeesite.common.utils.StringUtils;
 
 /**
  * 流程变量对象
+ * 
  * @author ThinkGem
  * @version 2013-11-03
  */
 public class Variable {
 
-	private Map<String, Object> map = Maps.newHashMap();
-	
-	private String keys;
-	private String values;
-	private String types;
+    private String keys;
 
-	public Variable (){
-		
-	}
-	
-	public Variable (Map<String, Object> map){
-		this.map = map;
-	}
+    private Map<String, Object> map = Maps.newHashMap();
 
-	public String getKeys() {
-		return keys;
-	}
+    private String types;
 
-	public void setKeys(String keys) {
-		this.keys = keys;
-	}
+    private String values;
 
-	public String getValues() {
-		return values;
-	}
+    public Variable() {
 
-	public void setValues(String values) {
-		this.values = values;
-	}
+    }
 
-	public String getTypes() {
-		return types;
-	}
+    public Variable(Map<String, Object> map) {
+        this.map = map;
+    }
 
-	public void setTypes(String types) {
-		this.types = types;
-	}
+    public String getKeys() {
+        return keys;
+    }
 
-	@JsonIgnore
-	public Map<String, Object> getVariableMap() {
+    public Map<String, Object> getMap() {
+        return map;
+    }
 
-		ConvertUtils.register(new DateConverter(), java.util.Date.class);
+    public String getTypes() {
+        return types;
+    }
 
-		if (StringUtils.isBlank(keys)) {
-			return map;
-		}
+    public String getValues() {
+        return values;
+    }
 
-		String[] arrayKey = keys.split(",");
-		String[] arrayValue = values.split(",");
-		String[] arrayType = types.split(",");
-		for (int i = 0; i < arrayKey.length; i++) {
-			String key = arrayKey[i];
-			String value = arrayValue[i];
-			String type = arrayType[i];
+    @JsonIgnore
+    public Map<String, Object> getVariableMap() {
 
-			Class<?> targetType = Enum.valueOf(PropertyType.class, type).getValue();
-			Object objectValue = ConvertUtils.convert(value, targetType);
-			map.put(key, objectValue);
-		}
-		return map;
-	}
+        ConvertUtils.register(new DateConverter(), java.util.Date.class);
 
-	public Map<String, Object> getMap() {
-		return map;
-	}
+        if (org.apache.commons.lang3.StringUtils.isBlank(keys)) {
+            return map;
+        }
+
+        String[] arrayKey = keys.split(",");
+        String[] arrayValue = values.split(",");
+        String[] arrayType = types.split(",");
+        for (int i = 0; i < arrayKey.length; i++) {
+            String key = arrayKey[i];
+            String value = arrayValue[i];
+            String type = arrayType[i];
+
+            Class<?> targetType = Enum.valueOf(PropertyType.class, type).getValue();
+            Object objectValue = ConvertUtils.convert(value, targetType);
+            map.put(key, objectValue);
+        }
+        return map;
+    }
+
+    public void setKeys(String keys) {
+        this.keys = keys;
+    }
+
+    public void setTypes(String types) {
+        this.types = types;
+    }
+
+    public void setValues(String values) {
+        this.values = values;
+    }
 
 }

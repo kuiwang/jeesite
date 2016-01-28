@@ -12,91 +12,98 @@ import com.thinkgem.jeesite.common.persistence.DataEntity;
 
 /**
  * 字典Entity
+ * 
  * @author ThinkGem
  * @version 2013-05-15
  */
 public class Dict extends DataEntity<Dict> {
 
-	private static final long serialVersionUID = 1L;
-	private String value;	// 数据值
-	private String label;	// 标签名
-	private String type;	// 类型
-	private String description;// 描述
-	private Integer sort;	// 排序
-	private String parentId;//父Id
+    private static final long serialVersionUID = 1L;
 
-	public Dict() {
-		super();
-	}
-	
-	public Dict(String id){
-		super(id);
-	}
-	
-	public Dict(String value, String label){
-		this.value = value;
-		this.label = label;
-	}
-	
-	@XmlAttribute
-	@Length(min=1, max=100)
-	public String getValue() {
-		return value;
-	}
+    private String description;// 描述
 
-	public void setValue(String value) {
-		this.value = value;
-	}
-	
-	@XmlAttribute
-	@Length(min=1, max=100)
-	public String getLabel() {
-		return label;
-	}
+    private String label; // 标签名
 
-	public void setLabel(String label) {
-		this.label = label;
-	}
+    private String parentId;//父Id
 
-	@Length(min=1, max=100)
-	public String getType() {
-		return type;
-	}
+    private Integer sort; // 排序
 
-	public void setType(String type) {
-		this.type = type;
-	}
+    private String type; // 类型
 
-	@XmlAttribute
-	@Length(min=0, max=100)
-	public String getDescription() {
-		return description;
-	}
+    private String value; // 数据值
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
+    public Dict() {
+        super();
+    }
 
-	@NotNull
-	public Integer getSort() {
-		return sort;
-	}
+    public Dict(String id) {
+        super(id);
+    }
 
-	public void setSort(Integer sort) {
-		this.sort = sort;
-	}
+    public Dict(String value, String label) {
+        this.value = value;
+        this.label = label;
+    }
 
-	@Length(min=1, max=100)
-	public String getParentId() {
-		return parentId;
-	}
+    @XmlAttribute
+    @Length(min = 0, max = 100)
+    public String getDescription() {
+        return description;
+    }
 
-	public void setParentId(String parentId) {
-		this.parentId = parentId;
-	}
-	
-	@Override
-	public String toString() {
-		return label;
-	}
+    @XmlAttribute
+    @Length(min = 1, max = 100)
+    public String getLabel() {
+        return label;
+    }
+
+    @Length(min = 1, max = 100)
+    public String getParentId() {
+        return parentId;
+    }
+
+    @NotNull
+    public Integer getSort() {
+        return sort;
+    }
+
+    @Length(min = 1, max = 100)
+    public String getType() {
+        return type;
+    }
+
+    @XmlAttribute
+    @Length(min = 1, max = 100)
+    public String getValue() {
+        return value;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
+    }
+
+    public void setParentId(String parentId) {
+        this.parentId = parentId;
+    }
+
+    public void setSort(Integer sort) {
+        this.sort = sort;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
+
+    @Override
+    public String toString() {
+        return label;
+    }
 }

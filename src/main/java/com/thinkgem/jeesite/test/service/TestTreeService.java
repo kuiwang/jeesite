@@ -9,12 +9,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.thinkgem.jeesite.common.service.TreeService;
-import com.thinkgem.jeesite.common.utils.StringUtils;
-import com.thinkgem.jeesite.test.entity.TestTree;
 import com.thinkgem.jeesite.test.dao.TestTreeDao;
+import com.thinkgem.jeesite.test.entity.TestTree;
 
 /**
  * 树结构生成Service
+ * 
  * @author ThinkGem
  * @version 2015-04-06
  */
@@ -22,25 +22,29 @@ import com.thinkgem.jeesite.test.dao.TestTreeDao;
 @Transactional(readOnly = true)
 public class TestTreeService extends TreeService<TestTreeDao, TestTree> {
 
-	public TestTree get(String id) {
-		return super.get(id);
-	}
-	
-	public List<TestTree> findList(TestTree testTree) {
-		if (StringUtils.isNotBlank(testTree.getParentIds())){
-			testTree.setParentIds(","+testTree.getParentIds()+",");
-		}
-		return super.findList(testTree);
-	}
-	
-	@Transactional(readOnly = false)
-	public void save(TestTree testTree) {
-		super.save(testTree);
-	}
-	
-	@Transactional(readOnly = false)
-	public void delete(TestTree testTree) {
-		super.delete(testTree);
-	}
-	
+    @Override
+    @Transactional(readOnly = false)
+    public void delete(TestTree testTree) {
+        super.delete(testTree);
+    }
+
+    @Override
+    public List<TestTree> findList(TestTree testTree) {
+        if (org.apache.commons.lang3.StringUtils.isNotBlank(testTree.getParentIds())) {
+            testTree.setParentIds("," + testTree.getParentIds() + ",");
+        }
+        return super.findList(testTree);
+    }
+
+    @Override
+    public TestTree get(String id) {
+        return super.get(id);
+    }
+
+    @Override
+    @Transactional(readOnly = false)
+    public void save(TestTree testTree) {
+        super.save(testTree);
+    }
+
 }

@@ -18,92 +18,100 @@ import com.thinkgem.jeesite.common.utils.StringUtils;
 
 /**
  * 表单验证（包含验证码）过滤类
+ * 
  * @author ThinkGem
  * @version 2014-5-19
  */
 @Service
-public class FormAuthenticationFilter extends org.apache.shiro.web.filter.authc.FormAuthenticationFilter {
+public class FormAuthenticationFilter extends
+        org.apache.shiro.web.filter.authc.FormAuthenticationFilter {
 
-	public static final String DEFAULT_CAPTCHA_PARAM = "validateCode";
-	public static final String DEFAULT_MOBILE_PARAM = "mobileLogin";
-	public static final String DEFAULT_MESSAGE_PARAM = "message";
+    public static final String DEFAULT_CAPTCHA_PARAM = "validateCode";
 
-	private String captchaParam = DEFAULT_CAPTCHA_PARAM;
-	private String mobileLoginParam = DEFAULT_MOBILE_PARAM;
-	private String messageParam = DEFAULT_MESSAGE_PARAM;
+    public static final String DEFAULT_MESSAGE_PARAM = "message";
 
-	protected AuthenticationToken createToken(ServletRequest request, ServletResponse response) {
-		String username = getUsername(request);
-		String password = getPassword(request);
-		if (password==null){
-			password = "";
-		}
-		boolean rememberMe = isRememberMe(request);
-		String host = StringUtils.getRemoteAddr((HttpServletRequest)request);
-		String captcha = getCaptcha(request);
-		boolean mobile = isMobileLogin(request);
-		return new UsernamePasswordToken(username, password.toCharArray(), rememberMe, host, captcha, mobile);
-	}
+    public static final String DEFAULT_MOBILE_PARAM = "mobileLogin";
 
-	public String getCaptchaParam() {
-		return captchaParam;
-	}
+    private String captchaParam = DEFAULT_CAPTCHA_PARAM;
 
-	protected String getCaptcha(ServletRequest request) {
-		return WebUtils.getCleanParam(request, getCaptchaParam());
-	}
+    private String messageParam = DEFAULT_MESSAGE_PARAM;
 
-	public String getMobileLoginParam() {
-		return mobileLoginParam;
-	}
-	
-	protected boolean isMobileLogin(ServletRequest request) {
+    private String mobileLoginParam = DEFAULT_MOBILE_PARAM;
+
+    @Override
+    protected AuthenticationToken createToken(ServletRequest request, ServletResponse response) {
+        String username = getUsername(request);
+        String password = getPassword(request);
+        if (password == null) {
+            password = "";
+        }
+        boolean rememberMe = isRememberMe(request);
+        String host = StringUtils.getRemoteAddr((HttpServletRequest) request);
+        String captcha = getCaptcha(request);
+        boolean mobile = isMobileLogin(request);
+        return new UsernamePasswordToken(username, password.toCharArray(), rememberMe, host,
+                captcha, mobile);
+    }
+
+    protected String getCaptcha(ServletRequest request) {
+        return WebUtils.getCleanParam(request, getCaptchaParam());
+    }
+
+    public String getCaptchaParam() {
+        return captchaParam;
+    }
+
+    public String getMessageParam() {
+        return messageParam;
+    }
+
+    public String getMobileLoginParam() {
+        return mobileLoginParam;
+    }
+
+    /**
+     * 登录成功之后跳转URL
+     */
+    @Override
+    public String getSuccessUrl() {
+        return super.getSuccessUrl();
+    }
+
+    protected boolean isMobileLogin(ServletRequest request) {
         return WebUtils.isTrue(request, getMobileLoginParam());
     }
-	
-	public String getMessageParam() {
-		return messageParam;
-	}
-	
-	/**
-	 * 登录成功之后跳转URL
-	 */
-	public String getSuccessUrl() {
-		return super.getSuccessUrl();
-	}
-	
-	@Override
-	protected void issueSuccessRedirect(ServletRequest request,
-			ServletResponse response) throws Exception {
-//		Principal p = UserUtils.getPrincipal();
-//		if (p != null && !p.isMobileLogin()){
-			 WebUtils.issueRedirect(request, response, getSuccessUrl(), null, true);
-//		}else{
-//			super.issueSuccessRedirect(request, response);
-//		}
-	}
 
-	/**
-	 * 登录失败调用事件
-	 */
-	@Override
-	protected boolean onLoginFailure(AuthenticationToken token,
-			AuthenticationException e, ServletRequest request, ServletResponse response) {
-		String className = e.getClass().getName(), message = "";
-		if (IncorrectCredentialsException.class.getName().equals(className)
-				|| UnknownAccountException.class.getName().equals(className)){
-			message = "用户或密码错误, 请重试.";
-		}
-		else if (e.getMessage() != null && StringUtils.startsWith(e.getMessage(), "msg:")){
-			message = StringUtils.replace(e.getMessage(), "msg:", "");
-		}
-		else{
-			message = "系统出现点问题，请稍后再试！";
-			e.printStackTrace(); // 输出到控制台
-		}
+    @Override
+    protected void issueSuccessRedirect(ServletRequest request, ServletResponse response)
+            throws Exception {
+        //		Principal p = UserUtils.getPrincipal();
+        //		if (p != null && !p.isMobileLogin()){
+        WebUtils.issueRedirect(request, response, getSuccessUrl(), null, true);
+        //		}else{
+        //			super.issueSuccessRedirect(request, response);
+        //		}
+    }
+
+    /**
+     * 登录失败调用事件
+     */
+    @Override
+    protected boolean onLoginFailure(AuthenticationToken token, AuthenticationException e,
+            ServletRequest request, ServletResponse response) {
+        String className = e.getClass().getName(), message = "";
+        if (IncorrectCredentialsException.class.getName().equals(className)
+                || UnknownAccountException.class.getName().equals(className)) {
+            message = "用户或密码错误, 请重试.";
+        } else if ((e.getMessage() != null)
+                && org.apache.commons.lang3.StringUtils.startsWith(e.getMessage(), "msg:")) {
+            message = org.apache.commons.lang3.StringUtils.replace(e.getMessage(), "msg:", "");
+        } else {
+            message = "系统出现点问题，请稍后再试！";
+            e.printStackTrace(); // 输出到控制台
+        }
         request.setAttribute(getFailureKeyAttribute(), className);
         request.setAttribute(getMessageParam(), message);
         return true;
-	}
-	
+    }
+
 }

@@ -18,6 +18,7 @@ import org.apache.ibatis.session.SqlSession;
  * @since JDK 1.5
  */
 public class PaginationMapperRegistry extends MapperRegistry {
+
     public PaginationMapperRegistry(Configuration config) {
         super(config);
     }

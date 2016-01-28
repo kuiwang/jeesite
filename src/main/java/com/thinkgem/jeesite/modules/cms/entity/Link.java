@@ -14,103 +14,112 @@ import com.thinkgem.jeesite.modules.sys.entity.User;
 
 /**
  * 链接Entity
+ * 
  * @author ThinkGem
  * @version 2013-05-15
  */
 public class Link extends DataEntity<Link> {
-	
-	private static final long serialVersionUID = 1L;
-	private Category category;// 分类编号
-	private String title;	// 链接名称
-	private String color;	// 标题颜色（red：红色；green：绿色；blue：蓝色；yellow：黄色；orange：橙色）
-	private String image;	// 链接图片
-	private String href;	// 链接地址
-	private Integer weight;	// 权重，越大越靠前
-	private Date weightDate;// 权重期限，超过期限，将weight设置为0
-	private User user;		//关联用户
 
-	public Link() {
-		super();
-		this.weight = 0;
-	}
-	
-	public Link(String id){
-		this();
-		this.id = id;
-	}
+    private static final long serialVersionUID = 1L;
 
-	public Link(Category category){
-		this();
-		this.category = category;
-	}
+    private Category category;// 分类编号
 
-	@NotNull
-	public Category getCategory() {
-		return category;
-	}
+    private String color; // 标题颜色（red：红色；green：绿色；blue：蓝色；yellow：黄色；orange：橙色）
 
-	public void setCategory(Category category) {
-		this.category = category;
-	}
+    private String href; // 链接地址
 
-	@Length(min=1, max=255)
-	public String getTitle() {
-		return title;
-	}
+    private String image; // 链接图片
 
-	public void setTitle(String title) {
-		this.title = title;
-	}
+    private String title; // 链接名称
 
-	@Length(min=0, max=50)
-	public String getColor() {
-		return color;
-	}
+    private User user; //关联用户
 
-	public void setColor(String color) {
-		this.color = color;
-	}
+    private Integer weight; // 权重，越大越靠前
 
-	@Length(min=0, max=255)
-	public String getImage() {
-		return image;
-	}
+    private Date weightDate;// 权重期限，超过期限，将weight设置为0
 
-	public void setImage(String image) {
-		this.image = image;
-	}
+    public Link() {
+        super();
+        this.weight = 0;
+    }
 
-	@Length(min=0, max=255)
-	public String getHref() {
-		return href;
-	}
+    public Link(Category category) {
+        this();
+        this.category = category;
+    }
 
-	public void setHref(String href) {
-		this.href = href;
-	}
+    public Link(String id) {
+        this();
+        this.id = id;
+    }
 
-	public Integer getWeight() {
-		return weight;
-	}
+    @NotNull
+    public Category getCategory() {
+        return category;
+    }
 
-	public void setWeight(Integer weight) {
-		this.weight = weight;
-	}
+    @Length(min = 0, max = 50)
+    public String getColor() {
+        return color;
+    }
 
-	public Date getWeightDate() {
-		return weightDate;
-	}
+    @Length(min = 0, max = 255)
+    public String getHref() {
+        return href;
+    }
 
-	public void setWeightDate(Date weightDate) {
-		this.weightDate = weightDate;
-	}
+    @Length(min = 0, max = 255)
+    public String getImage() {
+        return image;
+    }
 
-	public User getUser() {
-		return user;
-	}
+    @Length(min = 1, max = 255)
+    public String getTitle() {
+        return title;
+    }
 
-	public void setUser(User user) {
-		this.user = user;
-	}
-	
+    public User getUser() {
+        return user;
+    }
+
+    public Integer getWeight() {
+        return weight;
+    }
+
+    public Date getWeightDate() {
+        return weightDate;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
+
+    public void setHref(String href) {
+        this.href = href;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public void setWeight(Integer weight) {
+        this.weight = weight;
+    }
+
+    public void setWeightDate(Date weightDate) {
+        this.weightDate = weightDate;
+    }
+
 }

@@ -11,80 +11,88 @@ import com.thinkgem.jeesite.common.persistence.DataEntity;
 
 /**
  * 文章Entity
+ * 
  * @author ThinkGem
  * @version 2013-01-15
  */
 public class ArticleData extends DataEntity<ArticleData> {
 
-	private static final long serialVersionUID = 1L;
-	private String id;		// 编号
-	private String content;	// 内容
-	private String copyfrom;// 来源
-	private String relation;// 相关文章
-	private String allowComment;// 是否允许评论
+    private static final long serialVersionUID = 1L;
 
-	private Article article;
-	
-	public ArticleData() {
-		super();
-		this.allowComment = Global.YES;
-	}
-	
-	public ArticleData(String id){
-		this();
-		this.id = id;
-	}
+    private String allowComment;// 是否允许评论
 
-	public String getId() {
-		return id;
-	}
+    private Article article;
 
-	public void setId(String id) {
-		this.id = id;
-	}
+    private String content; // 内容
 
-	@NotBlank
-	public String getContent() {
-		return content;
-	}
+    private String copyfrom;// 来源
 
-	public void setContent(String content) {
-		this.content = content;
-	}
+    private String id; // 编号
 
-	@Length(min=0, max=255)
-	public String getCopyfrom() {
-		return copyfrom;
-	}
+    private String relation;// 相关文章
 
-	public void setCopyfrom(String copyfrom) {
-		this.copyfrom = copyfrom;
-	}
+    public ArticleData() {
+        super();
+        this.allowComment = Global.YES;
+    }
 
-	@Length(min=0, max=255)
-	public String getRelation() {
-		return relation;
-	}
+    public ArticleData(String id) {
+        this();
+        this.id = id;
+    }
 
-	public void setRelation(String relation) {
-		this.relation = relation;
-	}
+    @Length(min = 1, max = 1)
+    public String getAllowComment() {
+        return allowComment;
+    }
 
-	@Length(min=1, max=1)
-	public String getAllowComment() {
-		return allowComment;
-	}
+    public Article getArticle() {
+        return article;
+    }
 
-	public void setAllowComment(String allowComment) {
-		this.allowComment = allowComment;
-	}
+    @NotBlank
+    public String getContent() {
+        return content;
+    }
 
-	public Article getArticle() {
-		return article;
-	}
+    @Length(min = 0, max = 255)
+    public String getCopyfrom() {
+        return copyfrom;
+    }
 
-	public void setArticle(Article article) {
-		this.article = article;
-	}
+    @Override
+    public String getId() {
+        return id;
+    }
+
+    @Length(min = 0, max = 255)
+    public String getRelation() {
+        return relation;
+    }
+
+    public void setAllowComment(String allowComment) {
+        this.allowComment = allowComment;
+    }
+
+    public void setArticle(Article article) {
+        this.article = article;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public void setCopyfrom(String copyfrom) {
+        this.copyfrom = copyfrom;
+    }
+
+    @Override
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setRelation(String relation) {
+        this.relation = relation;
+    }
 
 }

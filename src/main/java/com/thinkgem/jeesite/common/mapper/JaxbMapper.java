@@ -22,13 +22,11 @@ import org.springframework.util.Assert;
 
 import com.thinkgem.jeesite.common.utils.Exceptions;
 import com.thinkgem.jeesite.common.utils.Reflections;
-import com.thinkgem.jeesite.common.utils.StringUtils;
 
 /**
  * 使用Jaxb2.0实现XML<->Java Object的Mapper.
  * 
- * 在创建时需要设定所有需要序列化的Root对象的Class.
- * 特别支持Root对象是Collection的情形.
+ * 在创建时需要设定所有需要序列化的Root对象的Class. 特别支持Root对象是Collection的情形.
  * 
  * @author calvin
  * @version 2013-01-15
@@ -36,134 +34,134 @@ import com.thinkgem.jeesite.common.utils.StringUtils;
 @SuppressWarnings("rawtypes")
 public class JaxbMapper {
 
-	private static ConcurrentMap<Class, JAXBContext> jaxbContexts = new ConcurrentHashMap<Class, JAXBContext>();
+    /**
+     * 封装Root Element 是 Collection的情况.
+     */
+    public static class CollectionWrapper {
 
-	/**
-	 * Java Object->Xml without encoding.
-	 */
-	public static String toXml(Object root) {
-		Class clazz = Reflections.getUserClass(root);
-		return toXml(root, clazz, null);
-	}
+        @XmlAnyElement
+        protected Collection<?> collection;
+    }
 
-	/**
-	 * Java Object->Xml with encoding.
-	 */
-	public static String toXml(Object root, String encoding) {
-		Class clazz = Reflections.getUserClass(root);
-		return toXml(root, clazz, encoding);
-	}
+    private static ConcurrentMap<Class, JAXBContext> jaxbContexts = new ConcurrentHashMap<Class, JAXBContext>();
 
-	/**
-	 * Java Object->Xml with encoding.
-	 */
-	public static String toXml(Object root, Class clazz, String encoding) {
-		try {
-			StringWriter writer = new StringWriter();
-			createMarshaller(clazz, encoding).marshal(root, writer);
-			return writer.toString();
-		} catch (JAXBException e) {
-			throw Exceptions.unchecked(e);
-		}
-	}
+    /**
+     * 创建Marshaller并设定encoding(可为null). 线程不安全，需要每次创建或pooling。
+     */
+    public static Marshaller createMarshaller(Class clazz, String encoding) {
+        try {
+            JAXBContext jaxbContext = getJaxbContext(clazz);
 
-	/**
-	 * Java Collection->Xml without encoding, 特别支持Root Element是Collection的情形.
-	 */
-	public static String toXml(Collection<?> root, String rootName, Class clazz) {
-		return toXml(root, rootName, clazz, null);
-	}
+            Marshaller marshaller = jaxbContext.createMarshaller();
 
-	/**
-	 * Java Collection->Xml with encoding, 特别支持Root Element是Collection的情形.
-	 */
-	public static String toXml(Collection<?> root, String rootName, Class clazz, String encoding) {
-		try {
-			CollectionWrapper wrapper = new CollectionWrapper();
-			wrapper.collection = root;
+            marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
 
-			JAXBElement<CollectionWrapper> wrapperElement = new JAXBElement<CollectionWrapper>(new QName(rootName),
-					CollectionWrapper.class, wrapper);
+            if (org.apache.commons.lang3.StringUtils.isNotBlank(encoding)) {
+                marshaller.setProperty(Marshaller.JAXB_ENCODING, encoding);
+            }
 
-			StringWriter writer = new StringWriter();
-			createMarshaller(clazz, encoding).marshal(wrapperElement, writer);
+            return marshaller;
+        } catch (JAXBException e) {
+            throw Exceptions.unchecked(e);
+        }
+    }
 
-			return writer.toString();
-		} catch (JAXBException e) {
-			throw Exceptions.unchecked(e);
-		}
-	}
+    /**
+     * 创建UnMarshaller. 线程不安全，需要每次创建或pooling。
+     */
+    public static Unmarshaller createUnmarshaller(Class clazz) {
+        try {
+            JAXBContext jaxbContext = getJaxbContext(clazz);
+            return jaxbContext.createUnmarshaller();
+        } catch (JAXBException e) {
+            throw Exceptions.unchecked(e);
+        }
+    }
 
-	/**
-	 * Xml->Java Object.
-	 */
-	@SuppressWarnings("unchecked")
-	public static <T> T fromXml(String xml, Class<T> clazz) {
-		try {
-			StringReader reader = new StringReader(xml);
-			return (T) createUnmarshaller(clazz).unmarshal(reader);
-		} catch (JAXBException e) {
-			throw Exceptions.unchecked(e);
-		}
-	}
+    /**
+     * Xml->Java Object.
+     */
+    @SuppressWarnings("unchecked")
+    public static <T> T fromXml(String xml, Class<T> clazz) {
+        try {
+            StringReader reader = new StringReader(xml);
+            return (T) createUnmarshaller(clazz).unmarshal(reader);
+        } catch (JAXBException e) {
+            throw Exceptions.unchecked(e);
+        }
+    }
 
-	/**
-	 * 创建Marshaller并设定encoding(可为null).
-	 * 线程不安全，需要每次创建或pooling。
-	 */
-	public static Marshaller createMarshaller(Class clazz, String encoding) {
-		try {
-			JAXBContext jaxbContext = getJaxbContext(clazz);
+    protected static JAXBContext getJaxbContext(Class clazz) {
+        Assert.notNull(clazz, "'clazz' must not be null");
+        JAXBContext jaxbContext = jaxbContexts.get(clazz);
+        if (jaxbContext == null) {
+            try {
+                jaxbContext = JAXBContext.newInstance(clazz, CollectionWrapper.class);
+                jaxbContexts.putIfAbsent(clazz, jaxbContext);
+            } catch (JAXBException ex) {
+                throw new HttpMessageConversionException(
+                        "Could not instantiate JAXBContext for class [" + clazz + "]: "
+                                + ex.getMessage(), ex);
+            }
+        }
+        return jaxbContext;
+    }
 
-			Marshaller marshaller = jaxbContext.createMarshaller();
+    /**
+     * Java Collection->Xml without encoding, 特别支持Root
+     * Element是Collection的情形.
+     */
+    public static String toXml(Collection<?> root, String rootName, Class clazz) {
+        return toXml(root, rootName, clazz, null);
+    }
 
-			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+    /**
+     * Java Collection->Xml with encoding, 特别支持Root Element是Collection的情形.
+     */
+    public static String toXml(Collection<?> root, String rootName, Class clazz, String encoding) {
+        try {
+            CollectionWrapper wrapper = new CollectionWrapper();
+            wrapper.collection = root;
 
-			if (StringUtils.isNotBlank(encoding)) {
-				marshaller.setProperty(Marshaller.JAXB_ENCODING, encoding);
-			}
+            JAXBElement<CollectionWrapper> wrapperElement = new JAXBElement<CollectionWrapper>(
+                    new QName(rootName), CollectionWrapper.class, wrapper);
 
-			return marshaller;
-		} catch (JAXBException e) {
-			throw Exceptions.unchecked(e);
-		}
-	}
+            StringWriter writer = new StringWriter();
+            createMarshaller(clazz, encoding).marshal(wrapperElement, writer);
 
-	/**
-	 * 创建UnMarshaller.
-	 * 线程不安全，需要每次创建或pooling。
-	 */
-	public static Unmarshaller createUnmarshaller(Class clazz) {
-		try {
-			JAXBContext jaxbContext = getJaxbContext(clazz);
-			return jaxbContext.createUnmarshaller();
-		} catch (JAXBException e) {
-			throw Exceptions.unchecked(e);
-		}
-	}
+            return writer.toString();
+        } catch (JAXBException e) {
+            throw Exceptions.unchecked(e);
+        }
+    }
 
-	protected static JAXBContext getJaxbContext(Class clazz) {
-		Assert.notNull(clazz, "'clazz' must not be null");
-		JAXBContext jaxbContext = jaxbContexts.get(clazz);
-		if (jaxbContext == null) {
-			try {
-				jaxbContext = JAXBContext.newInstance(clazz, CollectionWrapper.class);
-				jaxbContexts.putIfAbsent(clazz, jaxbContext);
-			} catch (JAXBException ex) {
-				throw new HttpMessageConversionException("Could not instantiate JAXBContext for class [" + clazz
-						+ "]: " + ex.getMessage(), ex);
-			}
-		}
-		return jaxbContext;
-	}
+    /**
+     * Java Object->Xml without encoding.
+     */
+    public static String toXml(Object root) {
+        Class clazz = Reflections.getUserClass(root);
+        return toXml(root, clazz, null);
+    }
 
-	/**
-	 * 封装Root Element 是 Collection的情况.
-	 */
-	public static class CollectionWrapper {
+    /**
+     * Java Object->Xml with encoding.
+     */
+    public static String toXml(Object root, Class clazz, String encoding) {
+        try {
+            StringWriter writer = new StringWriter();
+            createMarshaller(clazz, encoding).marshal(root, writer);
+            return writer.toString();
+        } catch (JAXBException e) {
+            throw Exceptions.unchecked(e);
+        }
+    }
 
-		@XmlAnyElement
-		protected Collection<?> collection;
-	}
-	
+    /**
+     * Java Object->Xml with encoding.
+     */
+    public static String toXml(Object root, String encoding) {
+        Class clazz = Reflections.getUserClass(root);
+        return toXml(root, clazz, encoding);
+    }
+
 }

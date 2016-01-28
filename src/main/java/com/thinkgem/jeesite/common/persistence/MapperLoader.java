@@ -35,178 +35,189 @@ import org.springframework.util.StringUtils;
 //@Lazy(false)
 public class MapperLoader implements DisposableBean, InitializingBean, ApplicationContextAware {
 
-	private ConfigurableApplicationContext context = null;
-	private transient String basePackage = null;
-	private HashMap<String, String> fileMapping = new HashMap<String, String>();
-	private Scanner scanner = null;
-	private ScheduledExecutorService service = null;
+    @SuppressWarnings({ "rawtypes" })
+    class Scanner {
 
-	@Override
-	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-		this.context = (ConfigurableApplicationContext) applicationContext;
+        private static final String XML_RESOURCE_PATTERN = "**/*.xml";
 
-	}
+        private String[] basePackages;
 
-	@Override
-	public void afterPropertiesSet() throws Exception {
-		try {
-			service = Executors.newScheduledThreadPool(1);
-			
-			// 获取xml所在包
-			MapperScannerConfigurer config = context.getBean(MapperScannerConfigurer.class);
-			Field field = config.getClass().getDeclaredField("basePackage");
-			field.setAccessible(true);
-			basePackage = (String) field.get(config);
-			
-			// 触发文件监听事件
-			scanner = new Scanner();
-			scanner.scan();
+        private ResourcePatternResolver resourcePatternResolver = new PathMatchingResourcePatternResolver();
 
-			service.scheduleAtFixedRate(new Task(), 5, 5, TimeUnit.SECONDS);
+        public Scanner() {
+            basePackages = StringUtils.tokenizeToStringArray(MapperLoader.this.basePackage,
+                    ConfigurableApplicationContext.CONFIG_LOCATION_DELIMITERS);
+        }
 
-		} catch (Exception e1) {
-			e1.printStackTrace();
-		}
+        private void clearMap(Class<?> classConfig, Configuration configuration, String fieldName)
+                throws Exception {
+            Field field = classConfig.getDeclaredField(fieldName);
+            field.setAccessible(true);
+            Map mapConfig = (Map) field.get(configuration);
+            mapConfig.clear();
+        }
 
-	}
+        private void clearSet(Class<?> classConfig, Configuration configuration, String fieldName)
+                throws Exception {
+            Field field = classConfig.getDeclaredField(fieldName);
+            field.setAccessible(true);
+            Set setConfig = (Set) field.get(configuration);
+            setConfig.clear();
+        }
 
-	class Task implements Runnable {
-		@Override
-		public void run() {
-			try {
-				if (scanner.isChanged()) {
-					System.out.println("*Mapper.xml文件改变,重新加载.");
-					scanner.reloadXML();
-					System.out.println("加载完毕.");
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
+        public Resource[] getResource(String basePackage, String pattern) throws IOException {
+            String packageSearchPath = ResourcePatternResolver.CLASSPATH_ALL_URL_PREFIX
+                    + ClassUtils.convertClassNameToResourcePath(context.getEnvironment()
+                            .resolveRequiredPlaceholders(basePackage)) + "/" + pattern;
+            Resource[] resources = resourcePatternResolver.getResources(packageSearchPath);
+            return resources;
+        }
 
-	}
+        private String getValue(Resource resource) throws IOException {
+            String contentLength = String.valueOf((resource.contentLength()));
+            String lastModified = String.valueOf((resource.lastModified()));
+            return new StringBuilder(contentLength).append(lastModified).toString();
+        }
 
-	@SuppressWarnings({ "rawtypes" })
-	class Scanner {
-		
-		private String[] basePackages;
-		private static final String XML_RESOURCE_PATTERN = "**/*.xml";
-		private ResourcePatternResolver resourcePatternResolver = new PathMatchingResourcePatternResolver();
+        public boolean isChanged() throws IOException {
+            boolean isChanged = false;
+            for (String basePackage : basePackages) {
+                Resource[] resources = getResource(basePackage, XML_RESOURCE_PATTERN);
+                if (resources != null) {
+                    for (Resource resource : resources) {
+                        String name = resource.getFilename();
+                        String value = fileMapping.get(name);
+                        String multi_key = getValue(resource);
+                        if (!multi_key.equals(value)) {
+                            isChanged = true;
+                            fileMapping.put(name, multi_key);
+                        }
+                    }
+                }
+            }
+            return isChanged;
+        }
 
-		public Scanner() {
-			basePackages = StringUtils.tokenizeToStringArray(MapperLoader.this.basePackage,
-					ConfigurableApplicationContext.CONFIG_LOCATION_DELIMITERS);
-		}
+        public void reloadXML() throws Exception {
+            SqlSessionFactory factory = context.getBean(SqlSessionFactory.class);
+            Configuration configuration = factory.getConfiguration();
+            // 移除加载项
+            removeConfig(configuration);
+            // 重新扫描加载
+            for (String basePackage : basePackages) {
+                Resource[] resources = getResource(basePackage, XML_RESOURCE_PATTERN);
+                if (resources != null) {
+                    for (Resource resource : resources) {
+                        if (resource == null) {
+                            continue;
+                        }
+                        try {
+                            XMLMapperBuilder xmlMapperBuilder = new XMLMapperBuilder(
+                                    resource.getInputStream(), configuration, resource.toString(),
+                                    configuration.getSqlFragments());
+                            xmlMapperBuilder.parse();
+                        } catch (Exception e) {
+                            throw new NestedIOException("Failed to parse mapping resource: '"
+                                    + resource + "'", e);
+                        } finally {
+                            ErrorContext.instance().reset();
+                        }
+                    }
+                }
+            }
 
-		public Resource[] getResource(String basePackage, String pattern) throws IOException {
-			String packageSearchPath = ResourcePatternResolver.CLASSPATH_ALL_URL_PREFIX
-					+ ClassUtils.convertClassNameToResourcePath(context.getEnvironment().resolveRequiredPlaceholders(
-							basePackage)) + "/" + pattern;
-			Resource[] resources = resourcePatternResolver.getResources(packageSearchPath);
-			return resources;
-		}
+        }
 
-		public void reloadXML() throws Exception {
-			SqlSessionFactory factory = context.getBean(SqlSessionFactory.class);
-			Configuration configuration = factory.getConfiguration();
-			// 移除加载项
-			removeConfig(configuration);
-			// 重新扫描加载
-			for (String basePackage : basePackages) {
-				Resource[] resources = getResource(basePackage, XML_RESOURCE_PATTERN);
-				if (resources != null) {
-					for (int i = 0; i < resources.length; i++) {
-						if (resources[i] == null) {
-							continue;
-						}
-						try {
-							XMLMapperBuilder xmlMapperBuilder = new XMLMapperBuilder(resources[i].getInputStream(),
-									configuration, resources[i].toString(), configuration.getSqlFragments());
-							xmlMapperBuilder.parse();
-						} catch (Exception e) {
-							throw new NestedIOException("Failed to parse mapping resource: '" + resources[i] + "'", e);
-						} finally {
-							ErrorContext.instance().reset();
-						}
-					}
-				}
-			}
+        private void removeConfig(Configuration configuration) throws Exception {
+            Class<?> classConfig = configuration.getClass();
+            clearMap(classConfig, configuration, "mappedStatements");
+            clearMap(classConfig, configuration, "caches");
+            clearMap(classConfig, configuration, "resultMaps");
+            clearMap(classConfig, configuration, "parameterMaps");
+            clearMap(classConfig, configuration, "keyGenerators");
+            clearMap(classConfig, configuration, "sqlFragments");
 
-		}
+            clearSet(classConfig, configuration, "loadedResources");
 
-		private void removeConfig(Configuration configuration) throws Exception {
-			Class<?> classConfig = configuration.getClass();
-			clearMap(classConfig, configuration, "mappedStatements");
-			clearMap(classConfig, configuration, "caches");
-			clearMap(classConfig, configuration, "resultMaps");
-			clearMap(classConfig, configuration, "parameterMaps");
-			clearMap(classConfig, configuration, "keyGenerators");
-			clearMap(classConfig, configuration, "sqlFragments");
+        }
 
-			clearSet(classConfig, configuration, "loadedResources");
+        public void scan() throws IOException {
+            if (!fileMapping.isEmpty()) {
+                return;
+            }
+            for (String basePackage : basePackages) {
+                Resource[] resources = getResource(basePackage, XML_RESOURCE_PATTERN);
+                if (resources != null) {
+                    for (Resource resource : resources) {
+                        String multi_key = getValue(resource);
+                        fileMapping.put(resource.getFilename(), multi_key);
+                    }
+                }
+            }
+        }
+    }
 
-		}
+    class Task implements Runnable {
 
-		private void clearMap(Class<?> classConfig, Configuration configuration, String fieldName) throws Exception {
-			Field field = classConfig.getDeclaredField(fieldName);
-			field.setAccessible(true);
-			Map mapConfig = (Map) field.get(configuration);
-			mapConfig.clear();
-		}
+        @Override
+        public void run() {
+            try {
+                if (scanner.isChanged()) {
+                    System.out.println("*Mapper.xml文件改变,重新加载.");
+                    scanner.reloadXML();
+                    System.out.println("加载完毕.");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
 
-		private void clearSet(Class<?> classConfig, Configuration configuration, String fieldName) throws Exception {
-			Field field = classConfig.getDeclaredField(fieldName);
-			field.setAccessible(true);
-			Set setConfig = (Set) field.get(configuration);
-			setConfig.clear();
-		}
+    }
 
-		public void scan() throws IOException {
-			if (!fileMapping.isEmpty()) {
-				return;
-			}
-			for (String basePackage : basePackages) {
-				Resource[] resources = getResource(basePackage, XML_RESOURCE_PATTERN);
-				if (resources != null) {
-					for (int i = 0; i < resources.length; i++) {
-						String multi_key = getValue(resources[i]);
-						fileMapping.put(resources[i].getFilename(), multi_key);
-					}
-				}
-			}
-		}
+    private transient String basePackage = null;
 
-		private String getValue(Resource resource) throws IOException {
-			String contentLength = String.valueOf((resource.contentLength()));
-			String lastModified = String.valueOf((resource.lastModified()));
-			return new StringBuilder(contentLength).append(lastModified).toString();
-		}
+    private ConfigurableApplicationContext context = null;
 
-		public boolean isChanged() throws IOException {
-			boolean isChanged = false;
-			for (String basePackage : basePackages) {
-				Resource[] resources = getResource(basePackage, XML_RESOURCE_PATTERN);
-				if (resources != null) {
-					for (int i = 0; i < resources.length; i++) {
-						String name = resources[i].getFilename();
-						String value = fileMapping.get(name);
-						String multi_key = getValue(resources[i]);
-						if (!multi_key.equals(value)) {
-							isChanged = true;
-							fileMapping.put(name, multi_key);
-						}
-					}
-				}
-			}
-			return isChanged;
-		}
-	}
+    private HashMap<String, String> fileMapping = new HashMap<String, String>();
 
-	@Override
-	public void destroy() throws Exception {
-		if (service != null) {
-			service.shutdownNow();
-		}
-	}
+    private Scanner scanner = null;
+
+    private ScheduledExecutorService service = null;
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        try {
+            service = Executors.newScheduledThreadPool(1);
+
+            // 获取xml所在包
+            MapperScannerConfigurer config = context.getBean(MapperScannerConfigurer.class);
+            Field field = config.getClass().getDeclaredField("basePackage");
+            field.setAccessible(true);
+            basePackage = (String) field.get(config);
+
+            // 触发文件监听事件
+            scanner = new Scanner();
+            scanner.scan();
+
+            service.scheduleAtFixedRate(new Task(), 5, 5, TimeUnit.SECONDS);
+
+        } catch (Exception e1) {
+            e1.printStackTrace();
+        }
+
+    }
+
+    @Override
+    public void destroy() throws Exception {
+        if (service != null) {
+            service.shutdownNow();
+        }
+    }
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        this.context = (ConfigurableApplicationContext) applicationContext;
+
+    }
 
 }

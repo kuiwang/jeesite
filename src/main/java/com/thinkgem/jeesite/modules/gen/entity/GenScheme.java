@@ -9,123 +9,131 @@ import com.thinkgem.jeesite.common.persistence.DataEntity;
 
 /**
  * 生成方案Entity
+ * 
  * @author ThinkGem
  * @version 2013-10-15
  */
 public class GenScheme extends DataEntity<GenScheme> {
-	
-	private static final long serialVersionUID = 1L;
-	private String name; 	// 名称
-	private String category;		// 分类
-	private String packageName;		// 生成包路径
-	private String moduleName;		// 生成模块名
-	private String subModuleName;		// 生成子模块名
-	private String functionName;		// 生成功能名
-	private String functionNameSimple;		// 生成功能名（简写）
-	private String functionAuthor;		// 生成功能作者
-	private GenTable genTable;		// 业务表名
-	
-	private String flag; 	// 0：保存方案； 1：保存方案并生成代码
-	
-	private Boolean replaceFile;	// 是否替换现有文件    0：不替换；1：替换文件
 
-	public GenScheme() {
-		super();
-	}
+    private static final long serialVersionUID = 1L;
 
-	public GenScheme(String id){
-		super(id);
-	}
-	
-	@Length(min=1, max=200)
-	public String getName() {
-		return name;
-	}
+    private String category; // 分类
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    private String flag; // 0：保存方案； 1：保存方案并生成代码
 
-	public String getPackageName() {
-		return packageName;
-	}
+    private String functionAuthor; // 生成功能作者
 
-	public void setPackageName(String packageName) {
-		this.packageName = packageName;
-	}
+    private String functionName; // 生成功能名
 
-	public String getModuleName() {
-		return moduleName;
-	}
+    private String functionNameSimple; // 生成功能名（简写）
 
-	public void setModuleName(String moduleName) {
-		this.moduleName = moduleName;
-	}
+    private GenTable genTable; // 业务表名
 
-	public String getSubModuleName() {
-		return subModuleName;
-	}
+    private String moduleName; // 生成模块名
 
-	public void setSubModuleName(String subModuleName) {
-		this.subModuleName = subModuleName;
-	}
+    private String name; // 名称
 
-	public String getCategory() {
-		return category;
-	}
+    private String packageName; // 生成包路径
 
-	public void setCategory(String category) {
-		this.category = category;
-	}
+    private Boolean replaceFile; // 是否替换现有文件    0：不替换；1：替换文件
 
-	public String getFunctionName() {
-		return functionName;
-	}
+    private String subModuleName; // 生成子模块名
 
-	public void setFunctionName(String functionName) {
-		this.functionName = functionName;
-	}
+    public GenScheme() {
+        super();
+    }
 
-	public String getFunctionNameSimple() {
-		return functionNameSimple;
-	}
+    public GenScheme(String id) {
+        super(id);
+    }
 
-	public void setFunctionNameSimple(String functionNameSimple) {
-		this.functionNameSimple = functionNameSimple;
-	}
+    public String getCategory() {
+        return category;
+    }
 
-	public String getFunctionAuthor() {
-		return functionAuthor;
-	}
+    public String getFlag() {
+        return flag;
+    }
 
-	public void setFunctionAuthor(String functionAuthor) {
-		this.functionAuthor = functionAuthor;
-	}
+    public String getFunctionAuthor() {
+        return functionAuthor;
+    }
 
-	public GenTable getGenTable() {
-		return genTable;
-	}
+    public String getFunctionName() {
+        return functionName;
+    }
 
-	public void setGenTable(GenTable genTable) {
-		this.genTable = genTable;
-	}
+    public String getFunctionNameSimple() {
+        return functionNameSimple;
+    }
 
-	public String getFlag() {
-		return flag;
-	}
+    public GenTable getGenTable() {
+        return genTable;
+    }
 
-	public void setFlag(String flag) {
-		this.flag = flag;
-	}
+    public String getModuleName() {
+        return moduleName;
+    }
 
-	public Boolean getReplaceFile() {
-		return replaceFile;
-	}
+    @Length(min = 1, max = 200)
+    public String getName() {
+        return name;
+    }
 
-	public void setReplaceFile(Boolean replaceFile) {
-		this.replaceFile = replaceFile;
-	}
-	
+    public String getPackageName() {
+        return packageName;
+    }
+
+    public Boolean getReplaceFile() {
+        return replaceFile;
+    }
+
+    public String getSubModuleName() {
+        return subModuleName;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public void setFlag(String flag) {
+        this.flag = flag;
+    }
+
+    public void setFunctionAuthor(String functionAuthor) {
+        this.functionAuthor = functionAuthor;
+    }
+
+    public void setFunctionName(String functionName) {
+        this.functionName = functionName;
+    }
+
+    public void setFunctionNameSimple(String functionNameSimple) {
+        this.functionNameSimple = functionNameSimple;
+    }
+
+    public void setGenTable(GenTable genTable) {
+        this.genTable = genTable;
+    }
+
+    public void setModuleName(String moduleName) {
+        this.moduleName = moduleName;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setPackageName(String packageName) {
+        this.packageName = packageName;
+    }
+
+    public void setReplaceFile(Boolean replaceFile) {
+        this.replaceFile = replaceFile;
+    }
+
+    public void setSubModuleName(String subModuleName) {
+        this.subModuleName = subModuleName;
+    }
+
 }
-
-

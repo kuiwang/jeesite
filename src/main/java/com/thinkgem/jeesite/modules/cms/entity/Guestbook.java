@@ -16,144 +16,160 @@ import com.thinkgem.jeesite.modules.sys.entity.User;
 
 /**
  * 留言Entity
+ * 
  * @author ThinkGem
  * @version 2013-05-15
  */
 public class Guestbook extends DataEntity<Guestbook> {
-	
-	private static final long serialVersionUID = 1L;
-	private String type; 	// 留言分类（咨询、建议、投诉、其它）
-	private String content; // 留言内容
-	private String name; 	// 姓名
-	private String email; 	// 邮箱
-	private String phone; 	// 电话
-	private String workunit;// 单位
-	private String ip; 		// 留言IP
-	private Date createDate;// 留言时间
-	private User reUser; 		// 回复人
-	private Date reDate;	// 回复时间
-	private String reContent;// 回复内容
-	private String delFlag;	// 删除标记删除标记（0：正常；1：删除；2：审核）
 
-	public Guestbook() {
-		this.delFlag = DEL_FLAG_AUDIT;
-	}
+    private static final long serialVersionUID = 1L;
 
-	public Guestbook(String id){
-		this();
-		this.id = id;
-	}
-	
-	public void prePersist(){
-		this.id = IdGen.uuid();
-		this.createDate = new Date();
-	}
-	
-	@Length(min=1, max=100)
-	public String getType() {
-		return type;
-	}
+    private String content; // 留言内容
 
-	public void setType(String type) {
-		this.type = type;
-	}
+    private Date createDate;// 留言时间
 
-	@Length(min=1, max=2000)
-	public String getContent() {
-		return content;
-	}
+    private String delFlag; // 删除标记删除标记（0：正常；1：删除；2：审核）
 
-	public void setContent(String content) {
-		this.content = content;
-	}
-	
-	@Length(min=1, max=100)
-	public String getName() {
-		return name;
-	}
+    private String email; // 邮箱
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    private String ip; // 留言IP
 
-	@Email @Length(min=0, max=100)
-	public String getEmail() {
-		return email;
-	}
+    private String name; // 姓名
 
-	public void setEmail(String email) {
-		this.email = email;
-	}
+    private String phone; // 电话
 
-	@Length(min=0, max=100)
-	public String getPhone() {
-		return phone;
-	}
+    private String reContent;// 回复内容
 
-	public void setPhone(String phone) {
-		this.phone = phone;
-	}
+    private Date reDate; // 回复时间
 
-	@Length(min=0, max=100)
-	public String getWorkunit() {
-		return workunit;
-	}
+    private User reUser; // 回复人
 
-	public void setWorkunit(String workunit) {
-		this.workunit = workunit;
-	}
+    private String type; // 留言分类（咨询、建议、投诉、其它）
 
-	@Length(min=1, max=100)
-	public String getIp() {
-		return ip;
-	}
+    private String workunit;// 单位
 
-	public void setIp(String ip) {
-		this.ip = ip;
-	}
+    public Guestbook() {
+        this.delFlag = DEL_FLAG_AUDIT;
+    }
 
-	@NotNull
-	public Date getCreateDate() {
-		return createDate;
-	}
+    public Guestbook(String id) {
+        this();
+        this.id = id;
+    }
 
-	public void setCreateDate(Date createDate) {
-		this.createDate = createDate;
-	}
+    @Length(min = 1, max = 2000)
+    public String getContent() {
+        return content;
+    }
 
-	public User getReUser() {
-		return reUser;
-	}
+    @Override
+    @NotNull
+    public Date getCreateDate() {
+        return createDate;
+    }
 
-	public void setReUser(User reUser) {
-		this.reUser = reUser;
-	}
+    @Override
+    @Length(min = 1, max = 1)
+    public String getDelFlag() {
+        return delFlag;
+    }
 
-	public String getReContent() {
-		return reContent;
-	}
+    @Email
+    @Length(min = 0, max = 100)
+    public String getEmail() {
+        return email;
+    }
 
-	public void setReContent(String reContent) {
-		this.reContent = reContent;
-	}
+    @Length(min = 1, max = 100)
+    public String getIp() {
+        return ip;
+    }
 
-	public Date getReDate() {
-		return reDate;
-	}
+    @Length(min = 1, max = 100)
+    public String getName() {
+        return name;
+    }
 
-	public void setReDate(Date reDate) {
-		this.reDate = reDate;
-	}
+    @Length(min = 0, max = 100)
+    public String getPhone() {
+        return phone;
+    }
 
-	@Length(min=1, max=1)
-	public String getDelFlag() {
-		return delFlag;
-	}
+    public String getReContent() {
+        return reContent;
+    }
 
-	public void setDelFlag(String delFlag) {
-		this.delFlag = delFlag;
-	}
-	
+    public Date getReDate() {
+        return reDate;
+    }
+
+    public User getReUser() {
+        return reUser;
+    }
+
+    @Length(min = 1, max = 100)
+    public String getType() {
+        return type;
+    }
+
+    @Length(min = 0, max = 100)
+    public String getWorkunit() {
+        return workunit;
+    }
+
+    public void prePersist() {
+        this.id = IdGen.uuid();
+        this.createDate = new Date();
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    @Override
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    @Override
+    public void setDelFlag(String delFlag) {
+        this.delFlag = delFlag;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setIp(String ip) {
+        this.ip = ip;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public void setReContent(String reContent) {
+        this.reContent = reContent;
+    }
+
+    public void setReDate(Date reDate) {
+        this.reDate = reDate;
+    }
+
+    public void setReUser(User reUser) {
+        this.reUser = reUser;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public void setWorkunit(String workunit) {
+        this.workunit = workunit;
+    }
+
 }
-
-

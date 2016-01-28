@@ -19,6 +19,7 @@ import com.thinkgem.jeesite.modules.cms.service.StatsService;
 
 /**
  * 统计Controller
+ * 
  * @author ThinkGem
  * @version 2013-5-21
  */
@@ -26,22 +27,23 @@ import com.thinkgem.jeesite.modules.cms.service.StatsService;
 @RequestMapping(value = "${adminPath}/cms/stats")
 public class StatsController extends BaseController {
 
-	@Autowired
-	private StatsService statsService;
-	
-	/**
-	 * 文章信息量
-	 * @param paramMap
-	 * @param model
-	 * @return
-	 */
-	@RequiresPermissions("cms:stats:article")
-	@RequestMapping(value = "article")
-	public String article(@RequestParam Map<String, Object> paramMap, Model model) {
-		List<Category> list = statsService.article(paramMap);
-		model.addAttribute("list", list);
-		model.addAttribute("paramMap", paramMap);
-		return "modules/cms/statsArticle";
-	}
+    @Autowired
+    private StatsService statsService;
+
+    /**
+     * 文章信息量
+     * 
+     * @param paramMap
+     * @param model
+     * @return
+     */
+    @RequiresPermissions("cms:stats:article")
+    @RequestMapping(value = "article")
+    public String article(@RequestParam Map<String, Object> paramMap, Model model) {
+        List<Category> list = statsService.article(paramMap);
+        model.addAttribute("list", list);
+        model.addAttribute("paramMap", paramMap);
+        return "modules/cms/statsArticle";
+    }
 
 }

@@ -15,144 +15,146 @@ import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
 /**
  * 硕正TreeList Cols Group
+ * 
  * @author WangZhen
  * @version 2013-11-04
  */
 @XStreamAlias("Group")
 public class Group {
 
-	/**
-	 * 分组的id，仅用于加载采用该id代替列名的XML/JSON数据
-	 */
-	@XStreamAsAttribute
-	private String id;
-	
-	/**
-	 * 显示的文字 串 
-	 */
-	@XStreamAsAttribute
-	private String name;
+    /**
+     * 文字对齐 left/center/right center
+     */
+    @XStreamAsAttribute
+    private String align;
 
-	/**
-	 * 采用的字体, 前面定义的<Font>的序号 数字  指向在<Fonts>中定义的字体的顺序号, 从0开始计数, 等级高于<Properties>中的同名属性
-	 */
-	@XStreamAsAttribute
-	private String headerFontIndex;
+    /**
+     * 分组下的列集合
+     */
+    @XStreamAlias("Cols")
+    @XStreamImplicit
+    private List<Object> cols;
 
-	/**
-	 * 文字颜色 颜色串 #000000 
-	 */
-	@XStreamAsAttribute
-	private String textColor;
-	
-	/**
-	 * 文字对齐 left/center/right center 
-	 */
-	@XStreamAsAttribute
-	private String align;
-	
-	/**
-	 * 分组下的列集合
-	 */
-	@XStreamAlias("Cols")
-	@XStreamImplicit
-	private List<Object> cols;
-	
-	/**
-	 * 父级组ID，注解定义时有效
-	 */
-	@XStreamOmitField
-	private String parentId;
+    /**
+     * 采用的字体, 前面定义的<Font>的序号 数字 指向在<Fonts>中定义的字体的顺序号, 从0开始计数,
+     * 等级高于<Properties>中的同名属性
+     */
+    @XStreamAsAttribute
+    private String headerFontIndex;
 
-	/**
-	 * 字段排序，注解定义时有效
-	 */
-	@XStreamOmitField
-	private int sort;
-	
-	public Group() {
-		
-	}
-	
-	public Group(String name) {
-		this();
-		this.name = name;
-	}
-	
-	public Group(String name, List<Object> cols) {
-		this(name);
-		this.cols = cols;
-	}
-	
-	public Group(SupGroup supGroup){
-		ObjectUtils.annotationToObject(supGroup, this);
-	}
+    /**
+     * 分组的id，仅用于加载采用该id代替列名的XML/JSON数据
+     */
+    @XStreamAsAttribute
+    private String id;
 
-	public String getName() {
-		return name;
-	}
+    /**
+     * 显示的文字 串
+     */
+    @XStreamAsAttribute
+    private String name;
 
-	public void setName(String name) {
-		this.name = name;
-	}
-	
-	public List<Object> getCols() {
-		if (cols == null){
-			cols = Lists.newArrayList();
-		}
-		return cols;
-	}
+    /**
+     * 父级组ID，注解定义时有效
+     */
+    @XStreamOmitField
+    private String parentId;
 
-	public void setCols(List<Object> cols) {
-		this.cols = cols;
-	}
+    /**
+     * 字段排序，注解定义时有效
+     */
+    @XStreamOmitField
+    private int sort;
 
-	public String getHeaderFontIndex() {
-		return headerFontIndex;
-	}
+    /**
+     * 文字颜色 颜色串 #000000
+     */
+    @XStreamAsAttribute
+    private String textColor;
 
-	public void setHeaderFontIndex(String headerFontIndex) {
-		this.headerFontIndex = headerFontIndex;
-	}
+    public Group() {
 
-	public String getTextColor() {
-		return textColor;
-	}
+    }
 
-	public void setTextColor(String textColor) {
-		this.textColor = textColor;
-	}
+    public Group(String name) {
+        this();
+        this.name = name;
+    }
 
-	public String getAlign() {
-		return align;
-	}
+    public Group(String name, List<Object> cols) {
+        this(name);
+        this.cols = cols;
+    }
 
-	public void setAlign(String align) {
-		this.align = align;
-	}
+    public Group(SupGroup supGroup) {
+        ObjectUtils.annotationToObject(supGroup, this);
+    }
 
-	public String getId() {
-		return id;
-	}
+    public String getAlign() {
+        return align;
+    }
 
-	public void setId(String id) {
-		this.id = id;
-	}
+    public List<Object> getCols() {
+        if (cols == null) {
+            cols = Lists.newArrayList();
+        }
+        return cols;
+    }
 
-	public String getParentId() {
-		return parentId;
-	}
+    public String getHeaderFontIndex() {
+        return headerFontIndex;
+    }
 
-	public void setParentId(String parentId) {
-		this.parentId = parentId;
-	}
+    public String getId() {
+        return id;
+    }
 
-	public int getSort() {
-		return sort;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public void setSort(int sort) {
-		this.sort = sort;
-	}
-	
+    public String getParentId() {
+        return parentId;
+    }
+
+    public int getSort() {
+        return sort;
+    }
+
+    public String getTextColor() {
+        return textColor;
+    }
+
+    public void setAlign(String align) {
+        this.align = align;
+    }
+
+    public void setCols(List<Object> cols) {
+        this.cols = cols;
+    }
+
+    public void setHeaderFontIndex(String headerFontIndex) {
+        this.headerFontIndex = headerFontIndex;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setParentId(String parentId) {
+        this.parentId = parentId;
+    }
+
+    public void setSort(int sort) {
+        this.sort = sort;
+    }
+
+    public void setTextColor(String textColor) {
+        this.textColor = textColor;
+    }
+
 }

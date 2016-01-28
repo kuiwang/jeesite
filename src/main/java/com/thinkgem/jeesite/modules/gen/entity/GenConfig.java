@@ -14,60 +14,65 @@ import com.thinkgem.jeesite.modules.sys.entity.Dict;
 
 /**
  * 生成方案Entity
+ * 
  * @author ThinkGem
  * @version 2013-10-15
  */
-@XmlRootElement(name="config")
+@XmlRootElement(name = "config")
 public class GenConfig implements Serializable {
-	
-	private static final long serialVersionUID = 1L;
-	private List<GenCategory> categoryList;	// 代码模板分类
-	private List<Dict> javaTypeList;		// Java类型
-	private List<Dict> queryTypeList;		// 查询类型
-	private List<Dict> showTypeList;		// 显示类型
 
-	public GenConfig() {
-		super();
-	}
+    private static final long serialVersionUID = 1L;
 
-	@XmlElementWrapper(name = "category")
-	@XmlElement(name = "category")
-	public List<GenCategory> getCategoryList() {
-		return categoryList;
-	}
+    private List<GenCategory> categoryList; // 代码模板分类
 
-	public void setCategoryList(List<GenCategory> categoryList) {
-		this.categoryList = categoryList;
-	}
+    private List<Dict> javaTypeList; // Java类型
 
-	@XmlElementWrapper(name = "javaType")
-	@XmlElement(name = "dict")
-	public List<Dict> getJavaTypeList() {
-		return javaTypeList;
-	}
+    private List<Dict> queryTypeList; // 查询类型
 
-	public void setJavaTypeList(List<Dict> javaTypeList) {
-		this.javaTypeList = javaTypeList;
-	}
+    private List<Dict> showTypeList; // 显示类型
 
-	@XmlElementWrapper(name = "queryType")
-	@XmlElement(name = "dict")
-	public List<Dict> getQueryTypeList() {
-		return queryTypeList;
-	}
+    public GenConfig() {
+        super();
+    }
 
-	public void setQueryTypeList(List<Dict> queryTypeList) {
-		this.queryTypeList = queryTypeList;
-	}
+    @XmlElementWrapper(name = "category")
+    @XmlElement(name = "category")
+    public List<GenCategory> getCategoryList() {
+        return categoryList;
+    }
 
-	@XmlElementWrapper(name = "showType")
-	@XmlElement(name = "dict")
-	public List<Dict> getShowTypeList() {
-		return showTypeList;
-	}
+    @XmlElementWrapper(name = "javaType")
+    @XmlElement(name = "dict")
+    public List<Dict> getJavaTypeList() {
+        return javaTypeList;
+    }
 
-	public void setShowTypeList(List<Dict> showTypeList) {
-		this.showTypeList = showTypeList;
-	}
-	
+    @XmlElementWrapper(name = "queryType")
+    @XmlElement(name = "dict")
+    public List<Dict> getQueryTypeList() {
+        return queryTypeList;
+    }
+
+    @XmlElementWrapper(name = "showType")
+    @XmlElement(name = "dict")
+    public List<Dict> getShowTypeList() {
+        return showTypeList;
+    }
+
+    public void setCategoryList(List<GenCategory> categoryList) {
+        this.categoryList = categoryList;
+    }
+
+    public void setJavaTypeList(List<Dict> javaTypeList) {
+        this.javaTypeList = javaTypeList;
+    }
+
+    public void setQueryTypeList(List<Dict> queryTypeList) {
+        this.queryTypeList = queryTypeList;
+    }
+
+    public void setShowTypeList(List<Dict> showTypeList) {
+        this.showTypeList = showTypeList;
+    }
+
 }

@@ -9,174 +9,190 @@ import com.thinkgem.jeesite.modules.sys.entity.User;
 
 /**
  * 审批Entity
+ * 
  * @author thinkgem
  * @version 2014-05-16
  */
 public class TestAudit extends ActEntity<TestAudit> {
-	
-	private static final long serialVersionUID = 1L;
-	private User 	user;	//	归属用户
-	private Office 	office;	//	归属部门
-	private String 	post;	//	岗位
-	private String 	age;	//	性别
-	private String 	edu;	//	学历
-	private String 	content;	//	调整原因
-	private String 	olda;	//	现行标准 薪酬档级
-	private String 	oldb;	//	现行标准 月工资额
-	private String 	oldc;	//	现行标准 年薪总额
-	private String 	newa;	//	调整后标准 薪酬档级
-	private String 	newb;	//	调整后标准 月工资额
-	private String 	newc;	//	调整后标准 年薪总额
-	private String 	addNum;	//	月增资
-	private String 	exeDate;	//	执行时间
-	private String 	hrText;		//	人力资源部门意见
-	private String 	leadText;	//	分管领导意见
-	private String 	mainLeadText;//	集团主要领导意见
 
-	public TestAudit() {
-		super();
-	}
+    private static final long serialVersionUID = 1L;
 
-	public TestAudit(String id){
-		super(id);
-	}
-	
-	public String getPost() {
-		return post;
-	}
+    private String addNum; //	月增资
 
-	public void setPost(String post) {
-		this.post = post;
-	}
+    private String age; //	性别
 
-	public String getAge() {
-		return age;
-	}
+    private String content; //	调整原因
 
-	public void setAge(String age) {
-		this.age = age;
-	}
+    private String edu; //	学历
 
-	public String getEdu() {
-		return edu;
-	}
+    private String exeDate; //	执行时间
 
-	public void setEdu(String edu) {
-		this.edu = edu;
-	}
+    private String hrText; //	人力资源部门意见
 
-	public String getContent() {
-		return content;
-	}
+    private String leadText; //	分管领导意见
 
-	public void setContent(String content) {
-		this.content = content;
-	}
+    private String mainLeadText;//	集团主要领导意见
 
-	public String getOlda() {
-		return olda;
-	}
+    private String newa; //	调整后标准 薪酬档级
 
-	public void setOlda(String olda) {
-		this.olda = olda;
-	}
+    private String newb; //	调整后标准 月工资额
 
-	public String getOldb() {
-		return oldb;
-	}
+    private String newc; //	调整后标准 年薪总额
 
-	public void setOldb(String oldb) {
-		this.oldb = oldb;
-	}
+    private Office office; //	归属部门
 
-	public String getOldc() {
-		return oldc;
-	}
+    private String olda; //	现行标准 薪酬档级
 
-	public void setOldc(String oldc) {
-		this.oldc = oldc;
-	}
+    private String oldb; //	现行标准 月工资额
 
-	public String getNewa() {
-		return newa;
-	}
+    private String oldc; //	现行标准 年薪总额
 
-	public void setNewa(String newa) {
-		this.newa = newa;
-	}
+    private String post; //	岗位
 
-	public String getNewb() {
-		return newb;
-	}
+    private User user; //	归属用户
 
-	public void setNewb(String newb) {
-		this.newb = newb;
-	}
+    public TestAudit() {
+        super();
+    }
 
-	public String getNewc() {
-		return newc;
-	}
+    public TestAudit(String id) {
+        super(id);
+    }
 
-	public void setNewc(String newc) {
-		this.newc = newc;
-	}
+    public String getAddNum() {
+        return addNum;
+    }
 
-	public String getExeDate() {
-		return exeDate;
-	}
+    public String getAge() {
+        return age;
+    }
 
-	public void setExeDate(String exeDate) {
-		this.exeDate = exeDate;
-	}
+    public String getContent() {
+        return content;
+    }
 
-	public String getHrText() {
-		return hrText;
-	}
+    public String getEdu() {
+        return edu;
+    }
 
-	public void setHrText(String hrText) {
-		this.hrText = hrText;
-	}
+    public String getExeDate() {
+        return exeDate;
+    }
 
-	public String getLeadText() {
-		return leadText;
-	}
+    public String getHrText() {
+        return hrText;
+    }
 
-	public void setLeadText(String leadText) {
-		this.leadText = leadText;
-	}
+    public String getLeadText() {
+        return leadText;
+    }
 
-	public String getMainLeadText() {
-		return mainLeadText;
-	}
+    public String getMainLeadText() {
+        return mainLeadText;
+    }
 
-	public void setMainLeadText(String mainLeadText) {
-		this.mainLeadText = mainLeadText;
-	}
+    public String getNewa() {
+        return newa;
+    }
 
-	public User getUser() {
-		return user;
-	}
+    public String getNewb() {
+        return newb;
+    }
 
-	public void setUser(User user) {
-		this.user = user;
-	}
+    public String getNewc() {
+        return newc;
+    }
 
-	public Office getOffice() {
-		return office;
-	}
+    public Office getOffice() {
+        return office;
+    }
 
-	public void setOffice(Office office) {
-		this.office = office;
-	}
+    public String getOlda() {
+        return olda;
+    }
 
-	public String getAddNum() {
-		return addNum;
-	}
+    public String getOldb() {
+        return oldb;
+    }
 
-	public void setAddNum(String addNum) {
-		this.addNum = addNum;
-	}
-	
+    public String getOldc() {
+        return oldc;
+    }
+
+    public String getPost() {
+        return post;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setAddNum(String addNum) {
+        this.addNum = addNum;
+    }
+
+    public void setAge(String age) {
+        this.age = age;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public void setEdu(String edu) {
+        this.edu = edu;
+    }
+
+    public void setExeDate(String exeDate) {
+        this.exeDate = exeDate;
+    }
+
+    public void setHrText(String hrText) {
+        this.hrText = hrText;
+    }
+
+    public void setLeadText(String leadText) {
+        this.leadText = leadText;
+    }
+
+    public void setMainLeadText(String mainLeadText) {
+        this.mainLeadText = mainLeadText;
+    }
+
+    public void setNewa(String newa) {
+        this.newa = newa;
+    }
+
+    public void setNewb(String newb) {
+        this.newb = newb;
+    }
+
+    public void setNewc(String newc) {
+        this.newc = newc;
+    }
+
+    public void setOffice(Office office) {
+        this.office = office;
+    }
+
+    public void setOlda(String olda) {
+        this.olda = olda;
+    }
+
+    public void setOldb(String oldb) {
+        this.oldb = oldb;
+    }
+
+    public void setOldc(String oldc) {
+        this.oldc = oldc;
+    }
+
+    public void setPost(String post) {
+        this.post = post;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
 }
-
-

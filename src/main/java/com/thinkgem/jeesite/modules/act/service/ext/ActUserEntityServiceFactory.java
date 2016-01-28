@@ -10,22 +10,25 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * Activiti User Entity Service Factory
+ * 
  * @author ThinkGem
  * @version 2013-11-03
  */
 public class ActUserEntityServiceFactory implements SessionFactory {
-	
-	@Autowired
-	private ActUserEntityService actUserEntityService;
 
-	public Class<?> getSessionType() {
-		// 返回原始的UserIdentityManager类型
-		return UserIdentityManager.class;
-	}
+    @Autowired
+    private ActUserEntityService actUserEntityService;
 
-	public Session openSession() {
-		// 返回自定义的GroupEntityManager实例
-		return actUserEntityService;
-	}
+    @Override
+    public Class<?> getSessionType() {
+        // 返回原始的UserIdentityManager类型
+        return UserIdentityManager.class;
+    }
+
+    @Override
+    public Session openSession() {
+        // 返回自定义的GroupEntityManager实例
+        return actUserEntityService;
+    }
 
 }

@@ -12,56 +12,57 @@ import com.thoughtworks.xstream.converters.extended.ToAttributedValueConverter;
 
 /**
  * 硕正TreeList Properties Express
+ * 
  * @author WangZhen
  * @version 2013-11-04
  */
 @XStreamAlias("Express")
-@XStreamConverter(value = ToAttributedValueConverter.class, strings = {"text"})
+@XStreamConverter(value = ToAttributedValueConverter.class, strings = { "text" })
 public class Express {
 
-	/**
-	 * 是否自动按列的引用关系优化计算顺序  默认值true
-	 */
-	@XStreamAsAttribute
-	private String isOpt;
-	
-	/**
-	 * 文本
-	 */
-	private String text;
+    /**
+     * 是否自动按列的引用关系优化计算顺序 默认值true
+     */
+    @XStreamAsAttribute
+    private String isOpt;
 
-	public Express() {
-		
-	}
-	
-	public Express(SupExpress supExpress) {
-		this();
-		ObjectUtils.annotationToObject(supExpress, this);
-	}
-	
-	public Express(String text) {
-		this.text = text;
-	}
-	
-	public Express(String name, String text) {
-		this(name);
-		this.text = text;
-	}
-	
-	public String getText() {
-		return text;
-	}
+    /**
+     * 文本
+     */
+    private String text;
 
-	public void setText(String text) {
-		this.text = text;
-	}
+    public Express() {
 
-	public String getIsOpt() {
-		return isOpt;
-	}
+    }
 
-	public void setIsOpt(String isOpt) {
-		this.isOpt = isOpt;
-	}
-	
+    public Express(String text) {
+        this.text = text;
+    }
+
+    public Express(String name, String text) {
+        this(name);
+        this.text = text;
+    }
+
+    public Express(SupExpress supExpress) {
+        this();
+        ObjectUtils.annotationToObject(supExpress, this);
+    }
+
+    public String getIsOpt() {
+        return isOpt;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public void setIsOpt(String isOpt) {
+        this.isOpt = isOpt;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
 }

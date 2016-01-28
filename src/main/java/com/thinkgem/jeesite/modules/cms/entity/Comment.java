@@ -14,125 +14,138 @@ import com.thinkgem.jeesite.modules.sys.entity.User;
 
 /**
  * 评论Entity
+ * 
  * @author ThinkGem
  * @version 2013-05-15
  */
 public class Comment extends DataEntity<Comment> {
 
-	private static final long serialVersionUID = 1L;
-	private Category category;// 分类编号
-	private String contentId;	// 归属分类内容的编号（Article.id、Photo.id、Download.id）
-	private String title;	// 归属分类内容的标题（Article.title、Photo.title、Download.title）
-	private String content; // 评论内容
-	private String name; 	// 评论姓名
-	private String ip; 		// 评论IP
-	private Date createDate;// 评论时间
-	private User auditUser; // 审核人
-	private Date auditDate;	// 审核时间
-	private String delFlag;	// 删除标记删除标记（0：正常；1：删除；2：审核）
+    private static final long serialVersionUID = 1L;
 
-	public Comment() {
-		super();
-		this.delFlag = DEL_FLAG_AUDIT;
-	}
-	
-	public Comment(String id){
-		this();
-		this.id = id;
-	}
-	
-	public Comment(Category category){
-		this();
-		this.category = category;
-	}
-	
+    private Date auditDate; // 审核时间
 
+    private User auditUser; // 审核人
 
-	@NotNull
-	public Category getCategory() {
-		return category;
-	}
+    private Category category;// 分类编号
 
-	public void setCategory(Category category) {
-		this.category = category;
-	}
+    private String content; // 评论内容
 
-	@NotNull
-	public String getContentId() {
-		return contentId;
-	}
+    private String contentId; // 归属分类内容的编号（Article.id、Photo.id、Download.id）
 
-	public void setContentId(String contentId) {
-		this.contentId = contentId;
-	}
+    private Date createDate;// 评论时间
 
-	@Length(min=1, max=255)
-	public String getContent() {
-		return content;
-	}
+    private String delFlag; // 删除标记删除标记（0：正常；1：删除；2：审核）
 
-	public void setContent(String content) {
-		this.content = content;
-	}
-	
-	@Length(min=1, max=255)
-	public String getTitle() {
-		return title;
-	}
+    private String ip; // 评论IP
 
-	public void setTitle(String title) {
-		this.title = title;
-	}
-	
-	@Length(min=1, max=100)
-	public String getName() {
-		return name;
-	}
+    private String name; // 评论姓名
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    private String title; // 归属分类内容的标题（Article.title、Photo.title、Download.title）
 
-	public User getAuditUser() {
-		return auditUser;
-	}
+    public Comment() {
+        super();
+        this.delFlag = DEL_FLAG_AUDIT;
+    }
 
-	public void setAuditUser(User auditUser) {
-		this.auditUser = auditUser;
-	}
+    public Comment(Category category) {
+        this();
+        this.category = category;
+    }
 
-	public Date getAuditDate() {
-		return auditDate;
-	}
+    public Comment(String id) {
+        this();
+        this.id = id;
+    }
 
-	public void setAuditDate(Date auditDate) {
-		this.auditDate = auditDate;
-	}
+    public Date getAuditDate() {
+        return auditDate;
+    }
 
-	public String getIp() {
-		return ip;
-	}
+    public User getAuditUser() {
+        return auditUser;
+    }
 
-	public void setIp(String ip) {
-		this.ip = ip;
-	}
+    @NotNull
+    public Category getCategory() {
+        return category;
+    }
 
-	@NotNull
-	public Date getCreateDate() {
-		return createDate;
-	}
+    @Length(min = 1, max = 255)
+    public String getContent() {
+        return content;
+    }
 
-	public void setCreateDate(Date createDate) {
-		this.createDate = createDate;
-	}
+    @NotNull
+    public String getContentId() {
+        return contentId;
+    }
 
-	@Length(min=1, max=1)
-	public String getDelFlag() {
-		return delFlag;
-	}
+    @Override
+    @NotNull
+    public Date getCreateDate() {
+        return createDate;
+    }
 
-	public void setDelFlag(String delFlag) {
-		this.delFlag = delFlag;
-	}
+    @Override
+    @Length(min = 1, max = 1)
+    public String getDelFlag() {
+        return delFlag;
+    }
+
+    public String getIp() {
+        return ip;
+    }
+
+    @Length(min = 1, max = 100)
+    public String getName() {
+        return name;
+    }
+
+    @Length(min = 1, max = 255)
+    public String getTitle() {
+        return title;
+    }
+
+    public void setAuditDate(Date auditDate) {
+        this.auditDate = auditDate;
+    }
+
+    public void setAuditUser(User auditUser) {
+        this.auditUser = auditUser;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public void setContentId(String contentId) {
+        this.contentId = contentId;
+    }
+
+    @Override
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    @Override
+    public void setDelFlag(String delFlag) {
+        this.delFlag = delFlag;
+    }
+
+    public void setIp(String ip) {
+        this.ip = ip;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
 }

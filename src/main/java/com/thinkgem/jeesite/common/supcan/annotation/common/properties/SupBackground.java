@@ -11,6 +11,7 @@ import java.lang.annotation.Target;
 
 /**
  * 硕正Background注解
+ * 
  * @author WangZhen
  * @version 2013-11-12
  */
@@ -18,11 +19,12 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Inherited
 public @interface SupBackground {
-	
-	/**
-	 * 背景颜色
-	 * @return
-	 */
-	String bgColor() default "";
+
+    /**
+     * 背景颜色
+     * 
+     * @return
+     */
+    String bgColor() default "";
 
 }

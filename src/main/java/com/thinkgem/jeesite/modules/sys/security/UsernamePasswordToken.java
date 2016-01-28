@@ -5,37 +5,39 @@ package com.thinkgem.jeesite.modules.sys.security;
 
 /**
  * 用户和密码（包含验证码）令牌类
+ * 
  * @author ThinkGem
  * @version 2013-5-19
  */
 public class UsernamePasswordToken extends org.apache.shiro.authc.UsernamePasswordToken {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private String captcha;
-	private boolean mobileLogin;
-	
-	public UsernamePasswordToken() {
-		super();
-	}
+    private String captcha;
 
-	public UsernamePasswordToken(String username, char[] password,
-			boolean rememberMe, String host, String captcha, boolean mobileLogin) {
-		super(username, password, rememberMe, host);
-		this.captcha = captcha;
-		this.mobileLogin = mobileLogin;
-	}
+    private boolean mobileLogin;
 
-	public String getCaptcha() {
-		return captcha;
-	}
+    public UsernamePasswordToken() {
+        super();
+    }
 
-	public void setCaptcha(String captcha) {
-		this.captcha = captcha;
-	}
+    public UsernamePasswordToken(String username, char[] password, boolean rememberMe, String host,
+            String captcha, boolean mobileLogin) {
+        super(username, password, rememberMe, host);
+        this.captcha = captcha;
+        this.mobileLogin = mobileLogin;
+    }
 
-	public boolean isMobileLogin() {
-		return mobileLogin;
-	}
-	
+    public String getCaptcha() {
+        return captcha;
+    }
+
+    public boolean isMobileLogin() {
+        return mobileLogin;
+    }
+
+    public void setCaptcha(String captcha) {
+        this.captcha = captcha;
+    }
+
 }
